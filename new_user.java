@@ -23,8 +23,8 @@ public class new_user extends JFrame  {
    public JLabel item1,usr_name,pswd,debitAcc,bal_debit,creditAcc,maxCredit,bal_credit,rate,noOfpayments,result,sec_ques,sec_ans;
    public JTextField user_name,password,debit_Accnt,debit_balance,credit_Accnt,max_credit,credit_balance,interest_rate,payment_number,answer;
    public JButton button,button1;
-   public String username,pswrd,ques_chosen,ans;
-   public int dbt_Act,dbt_bal,cdt_Act,max_cdt,cdt_bal,payment_num;
+   public String username,pswrd,cdt_Act,dbt_Act,ques_chosen,ans;
+   public int dbt_bal,max_cdt,cdt_bal,payment_num;
    double int_rate;
    public static int index;
    public static JSONObject json,json1;
@@ -214,16 +214,28 @@ public class new_user extends JFrame  {
             JSONObject j1=new JSONObject();
             JSONObject j2=new JSONObject();
             JSONObject j3=new JSONObject();
+            json=new JSONObject();
 			username=user_name.getText();
+             System.out.println(username);
             pswrd = password.getText();
-            dbt_Act=Integer.parseInt(debit_Accnt.getText());
+            System.out.println(pswrd);
+            dbt_Act=debit_Accnt.getText();
+            System.out.println(dbt_Act);
             dbt_bal=Integer.parseInt(debit_balance.getText());
-            cdt_Act=Integer.parseInt(credit_Accnt.getText());
+            System.out.println(dbt_bal);
+            cdt_Act=credit_Accnt.getText();
+            System.out.println(cdt_Act);
             max_cdt=Integer.parseInt(max_credit.getText());
+            System.out.println(max_cdt);
             cdt_bal=Integer.parseInt(credit_balance.getText());
+            System.out.println(cdt_bal);
             int_rate=Double.parseDouble(interest_rate.getText());
+            System.out.println(int_rate);
             payment_num=Integer.parseInt(payment_number.getText());
+            System.out.println(payment_num);
             ans=answer.getText();
+            System.out.println(ans);
+            System.out.println(username);
             json.put("uname",username);
             json.put("password",pswrd);
             json.put("debitAccount",dbt_Act);
@@ -239,25 +251,26 @@ public class new_user extends JFrame  {
             j3.put("debit",dbt_bal);
             j3.put("credit",cdt_bal);
             json.put("balance",j3);
+        System.out.println(json.toString());
 
-        json1=http_post.excutePost("http://localhost:8090/setup/signup",json);
+       json1=http_post.excutePost("http://localhost:8090/setup/signup",json);
 
          //  json1=http_post.excutePost("http://localhost:8090/setup/login","uname="+username+"&password="+pswrd+"&debitAccount="+dbt_Act+"&creditAccount:{accountNumber="+cdt_Act+"&maxCredit="+max_cdt+"&balance="+cdt_bal+"&interestRate="+int_rate+"&numofpayments="+payment_num+"}&security:{question="+ques_chosen+"&answer="+ans+"&balance:{debit="+dbt_bal+"&credit="+cdt_bal);
-            boolean name = (boolean)json1.get("succes");
+            boolean name = (boolean)json1.get("success");
         System.out.println(name);
         if(name==true){
               Options d2 = new Options();
         }
         else{
           System.out.println(" user already exists, Please try again");
-           JOptionPane.showMessageDialog(null, "Invalid user! Please try again");        
+           JOptionPane.showMessageDialog(null, "user already exists! Please try again");        
         }
     }
 		 
   });
 
  }
-    public static void main(String args[])
+    /*public static void main(String args[])
     {
         new_user wi=new new_user();
     wi.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

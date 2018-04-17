@@ -8,7 +8,7 @@ package netbanking;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
+import org.json.simple.JSONObject;
 /**
  *
  * @author sowmya
@@ -18,10 +18,10 @@ import javax.swing.*;
 //****************BALANCE ENQUIRY****************//
 
 class balance_enquiry extends JFrame{
-public JLabel Name,PIN,user_name,result,result1,result2;
-public JTextField nm,pn;
+public JLabel Name,user_name,result,result1,result2,result3,result4,result5;
+public JTextField nm;
 public int pin_input;
-public balance_enquiry(){
+public balance_enquiry(String str){
      
      setLayout(new GridBagLayout());
      GridBagConstraints c1 = new GridBagConstraints();
@@ -30,98 +30,134 @@ public balance_enquiry(){
      setVisible(true);
 	 
     
-    result1=new JLabel("");
+    result=new JLabel("");
     c1.fill = GridBagConstraints.HORIZONTAL;
      c1.gridx = 0;
      c1.gridy = 0;
      c1.gridwidth = 2;
-     add(result1,c1);
+     add(result,c1);
 
 	//result1.setText("Hello "+readfile.c[welcome_frame.index]);  --To be  done
 	
-    PIN = new JLabel("Enter PIN");
-    c1.fill = GridBagConstraints.HORIZONTAL;
-     c1.gridx =0;
-     c1.gridy =20;
-     c1.gridwidth =2;
-    add(PIN,c1);
-    
-    pn= new JTextField(4);
-    c1.fill = GridBagConstraints.HORIZONTAL;
-     c1.gridx = 0;
-     c1.gridy = 30;
-     c1.gridwidth =2;
-     add(pn,c1); 
         
-	result=new JLabel("");
+	result1=new JLabel("Debit Balance");
 	 c1.fill = GridBagConstraints.HORIZONTAL;
      c1.gridx = 0;
-     c1.gridy = 40;
+     c1.gridy = 10;
      c1.gridwidth = 2;
-     add(result,c1);
-	 	 	 
-	result2=new JLabel("");
+     add(result1,c1);
+  
+  result2=new JLabel("");
 	 c1.fill = GridBagConstraints.HORIZONTAL;
-     c1.gridx = 0;
-     c1.gridy = 60;
+     c1.gridx = 2;
+     c1.gridy = 10;
      c1.gridwidth = 2;
      add(result2,c1);
+  
+
 	 	 	 
-	 pn.addActionListener(new ActionListener()
-	 {
-		 public void actionPerformed(ActionEvent e)
-		 {
-			  pin_input = Integer.parseInt(pn.getText());
-			  			
-			/*if(pin_input == readfile.b[welcome_frame.index])
-				{	
-					result2.setText("Available Balance    " + readfile.d[welcome_frame.index]);
-					result.setText("");
-					//result.setText("valid pin");
-					 decission tr1 = new decission();
-				     
-				}
+	result3=new JLabel("Credit Balance:");
+	 c1.fill = GridBagConstraints.HORIZONTAL;
+     c1.gridx = 0;
+     c1.gridy = 20;
+     c1.gridwidth = 2;
+     add(result3,c1);
+	
+  result4=new JLabel("");
+	 c1.fill = GridBagConstraints.HORIZONTAL;
+     c1.gridx = 2;
+     c1.gridy = 20;
+     c1.gridwidth = 2;
+     add(result4,c1);
+
+  result5=new JLabel("");
+	 c1.fill = GridBagConstraints.HORIZONTAL;
+     c1.gridx = 1;
+     c1.gridy = 30;
+     c1.gridwidth = 2;
+     add(result5,c1);
+
+	 
+
+       JSONObject j1=new JSONObject();
+       JSONObject j2=new JSONObject();
+       j1.put("token",str);
+       j1.put("uname",Welcome.user_name);
+			 j2=http_post.excutePost("http://localhost:8090/api/balance",j1);	
+
+        boolean name1 = (boolean)j2.get("success");
+        System.out.println(name1);
+			  if(name1==true)
+        {
+              result2.setText((j2.get("debitbalance")).toString());
+              result4.setText((j2.get("creditbalance")).toString());
+        }
 				
 				else 
-					result.setText("Invalid pin");
-			*/						
-				
-			  
-		 }
-	 });
+					result5.setText("Invalid pin");						
+	
 	 
  }
 }
 
-//---------------------------------------amount---------------------------------------------------------------------------------
 
-class amount extends JFrame{
-public JLabel Rec_Accno,Enter_Amount,result,result1;
-public JTextField acc_no,am;
+//---------------------------------------------------Money Transfer----------------------------------------------------------------
+
+class MoneyTransfer extends JFrame{
+
+
+public JLabel Sender_Accno,Rec_Accno,Enter_Amount,result,result1;
+public JTextField sacc_no,racc_no,am;
 public JButton tsfr;
 public static int amount_input;
 public static float balance;
 
-public amount(){
-setLayout(new GridBagLayout());
+public MoneyTransfer(){
+	System.out.println("MoneyTransfer window");
+     
+     setLayout(new GridBagLayout());
      GridBagConstraints c4 = new GridBagConstraints();
      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
      setSize(500,500);
      setVisible(true);
-    
-     Rec_Accno = new JLabel("Enter Receiver's Account number:");
+	 
+	 
+	 result=new JLabel("");
+	 c4.fill = GridBagConstraints.HORIZONTAL;
+     c4.gridx = 0;
+     c4.gridy = 0;
+     c4.gridwidth = 2;
+     add(result,c4);
+
+	//result1.setText("Hello "+readfile.c[welcome_frame.index]);  ------------------------------TODO---------------------
+	
+    Sender_Accno = new JLabel("Enter your Account number:");
     c4.fill = GridBagConstraints.HORIZONTAL;
      c4.gridx =0;
      c4.gridy =1;
      c4.gridwidth =1;
-    add(Rec_Accno,c4);
+    add(Sender_Accno,c4);
     
-    acc_no= new JTextField(4);
+    sacc_no= new JTextField(4);
     c4.fill = GridBagConstraints.HORIZONTAL;
      c4.gridx = 2;
      c4.gridy = 1;
      c4.gridwidth =2;
-     add(acc_no,c4);
+     add(sacc_no,c4);
+
+    Rec_Accno = new JLabel("Enter Receiver's Account number:");
+    c4.fill = GridBagConstraints.HORIZONTAL;
+     c4.gridx =0;
+     c4.gridy =2;
+     c4.gridwidth =1;
+    add(Rec_Accno,c4);
+    
+    racc_no= new JTextField(4);
+    c4.fill = GridBagConstraints.HORIZONTAL;
+     c4.gridx = 2;
+     c4.gridy = 2;
+     c4.gridwidth =2;
+     add(racc_no,c4);
     
     Enter_Amount = new JLabel("Enter Amount:");
     c4.fill = GridBagConstraints.HORIZONTAL;
@@ -130,130 +166,55 @@ setLayout(new GridBagLayout());
      c4.gridwidth =1;
     add(Enter_Amount,c4);
 	
-am= new JTextField(4);
+    am= new JTextField(4);
     c4.fill = GridBagConstraints.HORIZONTAL;
      c4.gridx = 2;
      c4.gridy = 4;
      c4.gridwidth =2;
      add(am,c4);
 	 
-	 result=new JLabel("");
-	 c4.fill = GridBagConstraints.HORIZONTAL;
-     c4.gridx = 0;
-     c4.gridy = 10;
-     c4.gridwidth = 1;
-     add(result,c4);
 	 
-	 result1=new JLabel("");
-	 c4.fill = GridBagConstraints.HORIZONTAL;
-     c4.gridx = 0;
-     c4.gridy = 20;
-     c4.gridwidth = 1;
-     add(result1,c4);
-
+	 
      tsfr=new JButton("Transfer");
      c4.fill = GridBagConstraints.HORIZONTAL;
      c4.gridx = 1;
      c4.gridy = 30;
      c4.gridwidth = 1;
      add(tsfr,c4);
-	 
-	 
+
+
+    result1 = new JLabel("Enter Amount:");
+    c4.fill = GridBagConstraints.HORIZONTAL;
+     c4.gridx =0;
+     c4.gridy =40;
+     c4.gridwidth =1;
+    add(result1,c4);
+
+	 	 
 	 tsfr.addActionListener(new ActionListener()
 	 {
 		 public void actionPerformed(ActionEvent e)
 		 {
-			  amount_input = Integer.parseInt(am.getText());
-			 /* if(amount_input > readfile.d[welcome_frame.index])  --------------------------TODO----------------
-				  result.setText("Sufficient funds are not available in your account");*/
-			  //else
-			  {
-			 
-			  //balance = readfile.d[welcome_frame.index] - amount_input;  --------------------------TODO----------------
-			  		  
-			 // readfile.d[welcome_frame.index] = balance;  --------------------------TODO----------------
-			//  writefile wf = new writefile();
-			 // wf.write_to_file1();
-			  //wf.write_to_file2();
-		     // e_receipt ere = new e_receipt();
-                          }
-			  
-			  
-		  }
-	 });
-	 
+			   JSONObject j1=new JSONObject();
+        JSONObject j2=new JSONObject();
+         String payer=sacc_no.getText();
+         String payee=racc_no.getText();
+         j1.put("token",Welcome.token);
+         j1.put("payer",payer);
+         j1.put("payee",payee);
 
-}
-}
-//---------------------------------------------------Money Transfer----------------------------------------------------------------
+          j2=http_post.excutePost("http://localhost:8090/api/transaction",j1);
+        	boolean name = (boolean)j2.get("success");
+        	System.out.println(name);
 
-class MoneyTransfer extends JFrame{
-
-public JLabel Name,PIN,user_name,result,result1;
-public JTextField nm,pn;
-public int pin_input;
-
-public MoneyTransfer(){
-	System.out.println("MoneyTransfer window");
-     
-     setLayout(new GridBagLayout());
-     GridBagConstraints c3 = new GridBagConstraints();
-     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-     setSize(500,500);
-     setVisible(true);
-	 
-	 
-	 result1=new JLabel("");
-	 c3.fill = GridBagConstraints.HORIZONTAL;
-     c3.gridx = 0;
-     c3.gridy = 0;
-     c3.gridwidth = 2;
-     add(result1,c3);
-
-	//result1.setText("Hello "+readfile.c[welcome_frame.index]);  ------------------------------TODO---------------------
-	
-    PIN = new JLabel("Enter PIN");
-    c3.fill = GridBagConstraints.HORIZONTAL;
-     c3.gridx =0;
-     c3.gridy =10;
-     c3.gridwidth =2;
-    add(PIN,c3);
-    
-    pn= new JTextField(4);
-    c3.fill = GridBagConstraints.HORIZONTAL;
-     c3.gridx = 0;
-     c3.gridy = 20;
-     c3.gridwidth =2;
-     add(pn,c3);
-        
-	result=new JLabel("");
-	 c3.fill = GridBagConstraints.HORIZONTAL;
-     c3.gridx = 0;
-     c3.gridy = 30;
-     c3.gridwidth = 1;
-     add(result,c3);
-	 
-	 
-	 
-	 	 
-	 pn.addActionListener(new ActionListener()
-	 {
-		 public void actionPerformed(ActionEvent e)
-		 {
-			  pin_input = Integer.parseInt(pn.getText());
-			  			System.out.println("outside");
-			//if(pin_input == readfile.b[welcome_frame.index])  ------------------------------TODO---------------------
-				{	
-					amount d4 = new amount();					
-					result.setText("");
-				}
-				
-				//else 
-					//result.setText("Invalid pin");
+			if(name==true){
+					result1.setText("Transaction Successfull");
+      }	
+			else{
+					result1.setText("Invalid details or amount Insufficient");
 									
-				
-			  
-		 }
+		   }
+     }
 	 });
 	 
  }
@@ -483,7 +444,7 @@ if(op.equals("Money Transfer"))
 if(op.equals("Balance Enquiry"))
 {
 	System.out.println("Balance Inquiry");
-        balance_enquiry be=new balance_enquiry();
+        balance_enquiry be=new balance_enquiry(Welcome.token);
 }
 
 
@@ -491,7 +452,7 @@ if(op.equals("Balance Enquiry"))
 if(op.equals("Pin Change")){
 	
 		System.out.println("PIN Change");
-		pin_success ps=new pin_success();
+		pin_success ps=new pin_success(Welcome.user_name);
 }
 
 if(op.equals("Mini Statement")){

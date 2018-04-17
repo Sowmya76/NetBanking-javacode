@@ -28,10 +28,10 @@ public class Welcome extends JFrame  {
    public JLabel item1,usr_name,password,result;
    public JTextField inp_name,pswd;
    public JButton button,button1;
-   public String user_name;
-   public int input;
+   public static String user_name,pswrd;
    public static int index;
    public static JSONObject json;
+   public static String token;
    public Welcome() {
      super("ATM GUI");
      setLayout(new GridBagLayout());
@@ -90,15 +90,18 @@ public class Welcome extends JFrame  {
 		 {
 			 //needs to verify credentials by sending http request
          user_name=inp_name.getText();
-        input = Integer.parseInt(pswd.getText());
+        pswrd = pswd.getText();
         JSONObject js1=new JSONObject();
         js1.put("uname",user_name);
-        js1.put("password",input);
-       // json=http_post.excutePost("http://localhost:8090/setup/login","uname="+user_name+"&password="+input);
+        js1.put("password",pswrd);
+       // json=http_post.excutePost("http://localhost:8090/setup/login","uname="+user_name+"&password="+pswrd);
         json=http_post.excutePost("http://localhost:8090/setup/login",js1);
-        boolean name = (boolean)json.get("succes");
+        boolean name = (boolean)json.get("success");
         System.out.println(name);
         if(name==true){
+              String test=(String)json.get("debitAccount");
+              System.out.println(test);
+              token=(String)json.get("token");
               Options d2 = new Options();
         }
         else{

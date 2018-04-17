@@ -33,8 +33,8 @@ public class http_post {
         con.setDoInput(true);
         con.setDoOutput(true);
         con.setUseCaches(false);
-        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
+       // con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+         con.setRequestProperty("Content-Type", "application/json");
         DataOutputStream printout = new DataOutputStream(con.getOutputStream());
         String usrid,pin;
         // This is the POST 
@@ -43,6 +43,7 @@ public class http_post {
         System.out.println("parameters are "+urlparameters);
 
         printout.writeBytes(content.toString());
+        System.out.println(content.toString());
         printout.flush();
         printout.close();
 
@@ -55,7 +56,7 @@ public class http_post {
         while (null != ((str = input.readLine()))) {
         JSONParser parser = new JSONParser(); 
         jsonObj = (JSONObject) parser.parse(str);
-        boolean name = (boolean)jsonObj.get("succes");
+        boolean name = (boolean)jsonObj.get("success");
         System.out.println(str);
         System.out.println(name);
         }
@@ -76,23 +77,29 @@ public class http_post {
         }
     } 
 
-    
+    /*
     public static void main(String args[]){
         String username="bindu"; int psword=123456;
+        json=new JSONObject();
         JSONObject j1=new JSONObject();
             JSONObject j2=new JSONObject();
             JSONObject j3=new JSONObject();
-			username="abc";
+            JSONObject json1=new JSONObject();
+            String user,pswrd,ques_chosen,ans,dbt_Act,cdt_Act;
+            int dbt_bal,max_cdt,cdt_bal,payment_num;
+            double int_rate;
+			user="abc";
             pswrd = "12345";
             dbt_Act="12345678";
             dbt_bal=10000;
             cdt_Act="34567812";
             max_cdt=100000;
             cdt_bal=100000;
-            int_rate=Double.parseDouble(interest_rate.getText());
-            payment_num=Integer.parseInt(payment_number.getText());
-            ans=answer.getText();
-            json.put("uname",username);
+            int_rate=10;
+            payment_num=5;
+            ques_chosen="what's ur pet name?";
+            ans="puppy";
+            json.put("uname",user);
             json.put("password",pswrd);
             json.put("debitAccount",dbt_Act);
             j1.put("accountnumber",cdt_Act);
@@ -108,9 +115,10 @@ public class http_post {
             j3.put("credit",cdt_bal);
             json.put("balance",j3);
 
-        json=excutePost("http://localhost:8090/setup/login","uname="+username+"&password="+psword);
-        String name = (String)json.get("token");
+        //json=excutePost("http://localhost:8090/setup/login","uname="+username+"&password="+psword);
+        json1=excutePost("http://localhost:3000/setup/setup",json);
+        String name = (String)json1.get("token");
         System.out.println(name);
     
-    }
+    }*/
 }
